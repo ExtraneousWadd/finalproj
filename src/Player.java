@@ -54,21 +54,19 @@ public class Player {
 
     public void moveDown() {
         if (yCoord + MOVE_AMT <= 435) {
-            yCoord += MOVE_AMT;
+            yCoord += 2;
         }
     }
 
     public void gravity(){
-        if(yCoord != 1000){
-            yCoord += 5;
-        }
+            yCoord += 2;
     }
 
     public BufferedImage getPlayerImage() {
         return image;
     }
 
-    // we use a "bounding Rectangle" for detecting collision
+
     public Rectangle playerRect() {
         int imageHeight = getPlayerImage().getHeight();
         int imageWidth = getPlayerImage().getWidth();

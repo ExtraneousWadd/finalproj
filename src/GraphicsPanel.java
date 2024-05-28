@@ -8,18 +8,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel implements KeyListener, MouseListener, ActionListener {
-    private BufferedImage background;
     private Player player;
     private boolean[] pressedKeys;
     private Timer timer;
     private int time;
+    private Stage background;
 
     public GraphicsPanel(String name) {
-        try {
-            background = ImageIO.read(new File("src/midBackground.png"));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        background = new Stage("src/line.png","stage",0,500);
         player = new Player("src/playerImage.png", name);
         pressedKeys = new boolean[128];
         time = 0;
@@ -34,7 +30,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
-        g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
+        g.drawImage(background.getStageImage(), background.getxCoord(), background.getyCoord(), null);  // the order that things get "painted" matter; we put background down first
         g.drawImage(player.getPlayerImage(), player.getxCoord(), player.getyCoord(), null);
 
         // player moves left (A)
@@ -56,7 +52,10 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         if (pressedKeys[83]) {
             player.moveDown();
         }
-        player.gravity();
+        if (!player.playerRect().contains(background.stageRect())) {
+            player.gravity();
+        }
+
     }
 
     // ----- KeyListener interface methods -----
