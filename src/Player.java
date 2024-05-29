@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.IOException;
 
 public class Player {
-    private final double MOVE_AMT = 5.0;
+    private final double MOVE_AMT = 2.5;
     private BufferedImage image;
     private double xCoord;
     private double yCoord;
     private String name;
+    private boolean gravity;
+
 
     public Player(String image, String name) {
         this.name = name;
@@ -20,6 +22,7 @@ public class Player {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        gravity = true;
     }
 
     public int getxCoord() {
@@ -35,7 +38,7 @@ public class Player {
     }
 
     public void moveRight() {
-        if (xCoord + MOVE_AMT <= 920) {
+        if (xCoord + MOVE_AMT <= 1900) {
             xCoord += MOVE_AMT;
         }
     }
@@ -47,19 +50,24 @@ public class Player {
     }
 
     public void jump() {
+
         if (yCoord - MOVE_AMT >= 0) {
-            yCoord -= MOVE_AMT * 5;
+            for(int i = 0; i < 100; i++) {
+                yCoord -= MOVE_AMT;
+            }
         }
     }
 
     public void moveDown() {
-        if (yCoord + MOVE_AMT <= 435) {
+        if (yCoord + MOVE_AMT <= 1000) {
             yCoord += 2;
         }
     }
 
     public void gravity(){
-            yCoord += 2;
+        if(gravity){
+            yCoord += 1.25;
+        }
     }
 
     public BufferedImage getPlayerImage() {

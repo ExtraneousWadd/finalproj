@@ -45,14 +45,16 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
         // player moves up (W)
         if (pressedKeys[87]) {
-            player.jump();
+            if (player.playerRect().intersects(background.stageRect())){
+                player.jump();
+        }
         }
 
         // player moves down (S)
         if (pressedKeys[83]) {
             player.moveDown();
         }
-        if (!player.playerRect().contains(background.stageRect())) {
+        if (!player.playerRect().intersects(background.stageRect())) {
             player.gravity();
         }
 

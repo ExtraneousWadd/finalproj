@@ -9,6 +9,7 @@ public class Stage {
     private double xCoord;
     private double yCoord;
     private String name;
+    private Rectangle rect;
 
     public Stage(String image, String name, double xCoord, double yCoord) {
         this.name = name;
@@ -19,6 +20,8 @@ public class Stage {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        rect = new Rectangle((int) xCoord, (int) yCoord, this.image.getWidth(), this.image.getHeight());
+
     }
 
     public int getxCoord() {
@@ -39,9 +42,6 @@ public class Stage {
 
 
     public Rectangle stageRect() {
-        int imageHeight = image.getHeight();
-        int imageWidth = image.getWidth();
-        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord, imageWidth, imageHeight);
         return rect;
     }
 }
