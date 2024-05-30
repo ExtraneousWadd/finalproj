@@ -16,7 +16,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
     public GraphicsPanel(String name) {
         background = new Stage("src/line.png","stage",0,500);
-        player = new Player("src/playerImage.png", name);
+        player = new Player("src/playerImage.png","src/playerImageleft.png", name);
         pressedKeys = new boolean[128];
         time = 0;
         timer = new Timer(1000, this); // this Timer will call the actionPerformed interface method every 1000ms = 1 second
@@ -36,11 +36,15 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         // player moves left (A)
         if (pressedKeys[65]) {
             player.moveLeft();
+            player.faceLeft();
+            player.setRun(true);
         }
 
         // player moves right (D)
         if (pressedKeys[68]) {
             player.moveRight();
+            player.faceRight();
+            player.setRun(true);
         }
 
         // player moves up (W)
@@ -50,14 +54,9 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         }
         }
 
-        // player moves down (S)
-        if (pressedKeys[83]) {
-            player.moveDown();
-        }
         if (!player.playerRect().intersects(background.stageRect())) {
             player.gravity();
         }
-
     }
 
     // ----- KeyListener interface methods -----
@@ -73,6 +72,9 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         pressedKeys[key] = false;
+        if(key == 68 || key == 65){
+            player.setRun(false);
+        }
     }
 
     // ----- MouseListener interface methods -----
