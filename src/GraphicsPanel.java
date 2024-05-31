@@ -48,14 +48,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         }
 
         // player moves up (W)
-        if (pressedKeys[87]) {
-            if (player.playerRect().intersects(background.stageRect())){
-                player.jump();
-        }
-        }
+
 
         if (!player.playerRect().intersects(background.stageRect())) {
             player.gravity();
+        } else {
+            player.jump(false);
         }
     }
 
@@ -67,6 +65,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
         int key = e.getKeyCode();
         pressedKeys[key] = true;
+        if(key == 87){
+            if (player.playerRect().intersects(background.stageRect())){
+                    player.jump(true);
+            }
+        }
     }
 
     public void keyReleased(KeyEvent e) {

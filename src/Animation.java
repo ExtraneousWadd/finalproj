@@ -13,11 +13,18 @@ public class Animation implements ActionListener {
         this.frames = frames;
         currentFrame = 0;
         timer = new Timer(delay, this);
-        timer.start();
     }
 
     public int getCurrentFrame() {
         return currentFrame;
+    }
+
+    public void startAnimation(){
+        setCurrentFrame();
+        timer.start();
+    }
+    public void setCurrentFrame(){
+        currentFrame = 0;
     }
 
     public ArrayList<BufferedImage> getFrames() {
@@ -31,6 +38,9 @@ public class Animation implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             currentFrame = (currentFrame + 1) % frames.size();
+            if(currentFrame == 0){
+                timer.stop();
+            }
         }
     }
 }

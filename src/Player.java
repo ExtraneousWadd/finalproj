@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class Player {
@@ -13,10 +14,12 @@ public class Player {
     private double xCoord;
     private double yCoord;
     private String name;
-    private boolean gravity;
     private Animation runRight;
     private Animation runLeft;
+    private Animation jumpRight;
     private boolean isRun;
+    private boolean jumping;
+    private ArrayList<BufferedImage> jump_animationRight;
 
 
     public Player(String imageRight, String imageLeft, String name) {
@@ -33,7 +36,6 @@ public class Player {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        gravity = true;
 
         ArrayList<BufferedImage> run_animationRight = new ArrayList<>();
         for (int i = 1; i <= 8; i++) {
@@ -57,7 +59,19 @@ public class Player {
             }
         }
         runLeft = new Animation(run_animationLeft,66);
+        jump_animationRight = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            String filename = "player/player1_jump_" + i + ".png";
+            try {
+                jump_animationRight.add(ImageIO.read(new File(filename)));
+            }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        jumpRight = new Animation(jump_animationRight,33);
         isRun = false;
+        jumping = false;
     }
 
     public int getxCoord() {
@@ -71,6 +85,7 @@ public class Player {
     public String getName() {
         return name;
     }
+    public boolean isJump(){return jumping;}
 
     public void faceRight() {
         facingRight = true;
@@ -92,18 +107,12 @@ public class Player {
         }
     }
 
-    public void jump() {
-        if (yCoord - MOVE_AMT >= 0) {
-            for(int i = 0; i < 100; i++) {
-                yCoord -= MOVE_AMT;
-            }
-        }
+    public void jump(boolean yes) {
+        jumping = yes;
     }
 
     public void gravity(){
-        if(gravity){
             yCoord += 1.25;
-        }
     }
 
     public void turn() {
@@ -115,6 +124,22 @@ public class Player {
     }
 
     public BufferedImage getPlayerImage() {
+        if(jumping){
+            jumpRight.startAnimation();
+            yCoord -= 1;
+            if(jumpRight.getActiveFrame() == jump_animationRight.get(6)){
+                jumping = false;
+                jumpRight.setCurrentFrame();
+                if(facingRight) {
+                    return imageRight;
+                } else {
+                    return imageLeft;
+                }
+            } else {
+                return jumpRight.getActiveFrame();
+            }
+
+        }
         if(isRun) {
             if (facingRight) {
                 return runRight.getActiveFrame();
@@ -122,7 +147,6 @@ public class Player {
                 return runLeft.getActiveFrame();
             }
         }
-
         if(facingRight) {
             return imageRight;
         } else {
