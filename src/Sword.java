@@ -16,7 +16,10 @@ public class Sword {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
 
+    public BufferedImage getImage(){
+        return image;
     }
 
     public Rectangle swordRect() {

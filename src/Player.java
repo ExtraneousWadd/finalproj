@@ -25,7 +25,7 @@ public class Player {
     public Player(String imageRight, String imageLeft, String name) {
         this.name = name;
         xCoord = 50; // starting position is (50, 435), right on top of ground
-        yCoord = 435;
+        yCoord = 400;
         try {
             this.imageRight = ImageIO.read(new File(imageRight));
         } catch (IOException e) {
@@ -69,9 +69,12 @@ public class Player {
                 System.out.println(e.getMessage());
             }
         }
-        jumpRight = new Animation(jump_animationRight,33);
+        jumpRight = new Animation(jump_animationRight,20);
         isRun = false;
         jumping = false;
+        runRight.startAnimation();
+        runLeft.startAnimation();
+        jumpRight.startAnimation();
     }
 
     public int getxCoord() {
@@ -125,20 +128,11 @@ public class Player {
 
     public BufferedImage getPlayerImage() {
         if(jumping){
-            jumpRight.startAnimation();
             yCoord -= 1;
-            if(jumpRight.getActiveFrame() == jump_animationRight.get(6)){
+            if(jumpRight.getCurrentFrame() == 0){
                 jumping = false;
-                jumpRight.setCurrentFrame();
-                if(facingRight) {
-                    return imageRight;
-                } else {
-                    return imageLeft;
-                }
-            } else {
-                return jumpRight.getActiveFrame();
             }
-
+            return jumpRight.getActiveFrame();
         }
         if(isRun) {
             if (facingRight) {
@@ -160,6 +154,13 @@ public class Player {
 
 
     public Rectangle playerRect() {
+        int imageHeight = getPlayerImage().getHeight();
+        int imageWidth = getPlayerImage().getWidth();
+        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord + 5, imageWidth, imageHeight);
+        return rect;
+    }
+
+    public Rectangle playerRect2() {
         int imageHeight = getPlayerImage().getHeight();
         int imageWidth = getPlayerImage().getWidth();
         Rectangle rect = new Rectangle((int) xCoord, (int) yCoord, imageWidth, imageHeight);

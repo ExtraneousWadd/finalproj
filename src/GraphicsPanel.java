@@ -11,12 +11,14 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private Player player;
     private boolean[] pressedKeys;
     private Timer timer;
+    private Sword sword;
     private int time;
     private Stage background;
 
     public GraphicsPanel(String name) {
         background = new Stage("src/line.png","stage",0,500);
         player = new Player("src/playerImage.png","src/playerImageleft.png", name);
+        sword = new Sword("src/sword.png");
         pressedKeys = new boolean[128];
         time = 0;
         timer = new Timer(1000, this); // this Timer will call the actionPerformed interface method every 1000ms = 1 second
@@ -32,6 +34,10 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         super.paintComponent(g);  // just do this
         g.drawImage(background.getStageImage(), background.getxCoord(), background.getyCoord(), null);  // the order that things get "painted" matter; we put background down first
         g.drawImage(player.getPlayerImage(), player.getxCoord(), player.getyCoord(), null);
+        g.drawImage(sword.getImage(), player.getxCoord(), player.getyCoord(), null);
+
+        g.setFont(new Font("Courier New", Font.BOLD, 24));
+        g.drawString(player.getName(), player.getxCoord() - 2, player.getyCoord() - 20);
 
         // player moves left (A)
         if (pressedKeys[65]) {
@@ -46,11 +52,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             player.faceRight();
             player.setRun(true);
         }
-
-        // player moves up (W)
-
-
-        if (!player.playerRect().intersects(background.stageRect())) {
+        Rectangle rect = new Rectangle((int) background.getxCoord(), (int) background.getyCoord() - 5, background.getStageImage().getWidth(), background.getStageImage().getWidth());
+        if (!player.playerRect().intersects(rect)) {
             player.gravity();
         } else {
             player.jump(false);
