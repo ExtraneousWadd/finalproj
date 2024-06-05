@@ -13,6 +13,7 @@ public class Player {
     private boolean facingRight;
     private double xCoord;
     private double yCoord;
+    private double preJumpYCoord;
     private String name;
     private Animation runRight;
     private Animation runLeft;
@@ -25,7 +26,8 @@ public class Player {
     public Player(String imageRight, String imageLeft, String name) {
         this.name = name;
         xCoord = 50; // starting position is (50, 435), right on top of ground
-        yCoord = 400;
+        yCoord = 100;
+        preJumpYCoord = yCoord;
         try {
             this.imageRight = ImageIO.read(new File(imageRight));
         } catch (IOException e) {
@@ -60,7 +62,7 @@ public class Player {
         }
         runLeft = new Animation(run_animationLeft,66);
         jump_animationRight = new ArrayList<>();
-        for (int i = 1; i <= 7; i++) {
+        /*for (int i = 1; i <= 7; i++) {
             String filename = "player/player1_jump_" + i + ".png";
             try {
                 jump_animationRight.add(ImageIO.read(new File(filename)));
@@ -68,6 +70,12 @@ public class Player {
             catch (IOException e) {
                 System.out.println(e.getMessage());
             }
+        }*/
+        try {
+            jump_animationRight.add(ImageIO.read(new File("player/player1_jump_3.png")));
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
         }
         jumpRight = new Animation(jump_animationRight,20);
         isRun = false;
@@ -111,11 +119,12 @@ public class Player {
     }
 
     public void jump(boolean yes) {
+        preJumpYCoord = yCoord;
         jumping = yes;
     }
 
     public void gravity(){
-            yCoord += 1.25;
+        yCoord += 1.25;
     }
 
     public void turn() {
@@ -128,8 +137,8 @@ public class Player {
 
     public BufferedImage getPlayerImage() {
         if(jumping){
-            yCoord -= 1;
-            if(jumpRight.getCurrentFrame() == 0){
+            yCoord -= 1.75;
+            if(yCoord < preJumpYCoord - 200) {
                 jumping = false;
             }
             return jumpRight.getActiveFrame();
@@ -151,19 +160,10 @@ public class Player {
     public void setRun(boolean set){
         isRun = set;
     }
-
-
     public Rectangle playerRect() {
         int imageHeight = getPlayerImage().getHeight();
         int imageWidth = getPlayerImage().getWidth();
-        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord + 5, imageWidth, imageHeight);
-        return rect;
-    }
-
-    public Rectangle playerRect2() {
-        int imageHeight = getPlayerImage().getHeight();
-        int imageWidth = getPlayerImage().getWidth();
-        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord, imageWidth, imageHeight);
+        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord + 5, 77, 119);
         return rect;
     }
 }

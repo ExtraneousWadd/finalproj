@@ -9,7 +9,7 @@ public class Animation implements ActionListener {
     private Timer timer;
     private int currentFrame;
 
-    public Animation(ArrayList<BufferedImage> frames, int delay) {
+    public Animation(ArrayList<BufferedImage> frames, int delay ) {
         this.frames = frames;
         currentFrame = 0;
         timer = new Timer(delay, this);
@@ -20,11 +20,11 @@ public class Animation implements ActionListener {
     }
 
     public void startAnimation(){
-        setCurrentFrame();
+        setCurrentFrame(0);
         timer.start();
     }
-    public void setCurrentFrame(){
-        currentFrame = 0;
+    public void setCurrentFrame(int setter){
+        currentFrame = setter;
     }
 
     public ArrayList<BufferedImage> getFrames() {
@@ -38,10 +38,10 @@ public class Animation implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             currentFrame = (currentFrame + 1) % frames.size();
-            if(currentFrame == 0){
-                timer.stop();
-                startAnimation();
-            }
+            //if(currentFrame == 0){
+            //    timer.stop();
+            //    startAnimation();
+           // }
         }
     }
 }

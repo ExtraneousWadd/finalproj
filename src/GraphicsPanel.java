@@ -52,12 +52,13 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             player.faceRight();
             player.setRun(true);
         }
-        Rectangle rect = new Rectangle((int) background.getxCoord(), (int) background.getyCoord() - 5, background.getStageImage().getWidth(), background.getStageImage().getWidth());
+        Rectangle rect = new Rectangle((int) background.getxCoord(), (int) background.getyCoord(), background.getStageImage().getWidth(), background.getStageImage().getWidth());
         if (!player.playerRect().intersects(rect)) {
             player.gravity();
         } else {
             player.jump(false);
         }
+
     }
 
     // ----- KeyListener interface methods -----
