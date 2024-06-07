@@ -10,6 +10,8 @@ public class Player {
     private final double MOVE_AMT = 2.5;
     private BufferedImage imageRight;
     private BufferedImage imageLeft;
+    private BufferedImage imageRightSword;
+    private BufferedImage imageLeftSword;
     private boolean facingRight;
     private double xCoord;
     private double yCoord;
@@ -17,13 +19,16 @@ public class Player {
     private String name;
     private Animation runRight;
     private Animation runLeft;
+    private Animation runRightSword;
+    private Animation runLeftSword;
     private Animation jumpRight;
     private boolean isRun;
     private boolean jumping;
+    private boolean hasSword;
     private ArrayList<BufferedImage> jump_animationRight;
 
 
-    public Player(String imageRight, String imageLeft, String name) {
+    public Player(String imageRight, String imageLeft, String imageRightSword, String imageLeftSword, String name) {
         this.name = name;
         xCoord = 50; // starting position is (50, 435), right on top of ground
         yCoord = 100;
@@ -35,6 +40,16 @@ public class Player {
         }
         try {
             this.imageLeft = ImageIO.read(new File(imageLeft));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            this.imageRightSword = ImageIO.read(new File(imageRightSword));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            this.imageLeftSword = ImageIO.read(new File(imageLeftSword));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -61,6 +76,29 @@ public class Player {
             }
         }
         runLeft = new Animation(run_animationLeft,66);
+
+        ArrayList<BufferedImage> run_animationRightSword = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            String filename = "player/player1_run_1_sword_" + i + ".png";
+            try {
+                run_animationRightSword.add(ImageIO.read(new File(filename)));
+            }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        runRightSword = new Animation(run_animationRightSword,66);
+        ArrayList<BufferedImage> run_animationLeftSword = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            String filename = "player/player1_run_1_sword_" + i + "_left.png";
+            try {
+                run_animationLeftSword.add(ImageIO.read(new File(filename)));
+            }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        runLeftSword = new Animation(run_animationLeftSword,66);
         jump_animationRight = new ArrayList<>();
         /*for (int i = 1; i <= 7; i++) {
             String filename = "player/player1_jump_" + i + ".png";
@@ -80,8 +118,11 @@ public class Player {
         jumpRight = new Animation(jump_animationRight,20);
         isRun = false;
         jumping = false;
+        hasSword = true;
         runRight.startAnimation();
         runLeft.startAnimation();
+        runRightSword.startAnimation();
+        runLeftSword.startAnimation();
         jumpRight.startAnimation();
     }
 
@@ -145,14 +186,26 @@ public class Player {
         }
         if(isRun) {
             if (facingRight) {
+                if(hasSword){
+                    return runRightSword.getActiveFrame();
+                }
                 return runRight.getActiveFrame();
             } else {
+                if(hasSword){
+                    return runLeftSword.getActiveFrame();
+                }
                 return runLeft.getActiveFrame();
             }
         }
         if(facingRight) {
+            if(hasSword){
+                return imageRightSword;
+            }
             return imageRight;
         } else {
+            if(hasSword){
+                return imageLeftSword;
+            }
             return imageLeft;
         }
     }
