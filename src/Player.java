@@ -48,10 +48,10 @@ public class Player {
         playerOther = player;
         if (p1) {
             xCoord = 50; // starting position is (50, 435), right on top of ground
-            yCoord = 100;
+            yCoord = 750;
         } else {
-            xCoord = 850;
-            yCoord = 100;
+            xCoord = 1750;
+            yCoord = 750;
         }
         preJumpYCoord = yCoord;
         try {
@@ -254,9 +254,9 @@ public class Player {
             if(p1){
                 xCoord = 50;
             } else {
-                xCoord = 850;
+                xCoord = 1750;
             }
-            yCoord = 0;
+            yCoord = 750;
             deadTimer();
         }
     }
@@ -309,10 +309,10 @@ public class Player {
     public void reset(){
         if (p1) {
             xCoord = 50;
-            yCoord = 100;
+            yCoord = 750;
         } else {
-            xCoord = 850;
-            yCoord = 100;
+            xCoord = 1750;
+            yCoord = 750;
         }
         isRun = false;
         jumping = false;
