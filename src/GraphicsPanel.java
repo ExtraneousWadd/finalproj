@@ -17,7 +17,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
     public GraphicsPanel(String name) {
         background = new Stage("src/line.png","stage",0,500);
-        player = new Player("src/playerImage.png","src/playerImageleft.png", "src/playerImage_sword.png", "src/playerImage_sword_left.png", name);
+        player = new Player("src/playerImage.png","src/playerImageleft.png", "src/playerImagesword.png", "src/playerImageswordleft.png", name);
         sword = new Sword("src/sword.png");
         pressedKeys = new boolean[128];
         time = 0;

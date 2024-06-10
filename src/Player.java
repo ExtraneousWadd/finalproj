@@ -79,7 +79,7 @@ public class Player {
 
         ArrayList<BufferedImage> run_animationRightSword = new ArrayList<>();
         for (int i = 1; i <= 8; i++) {
-            String filename = "player/player1_run_1_sword_" + i + ".png";
+            String filename = "player/player1_run_" + i + "_sword.png";
             try {
                 run_animationRightSword.add(ImageIO.read(new File(filename)));
             }
@@ -90,7 +90,7 @@ public class Player {
         runRightSword = new Animation(run_animationRightSword,66);
         ArrayList<BufferedImage> run_animationLeftSword = new ArrayList<>();
         for (int i = 1; i <= 8; i++) {
-            String filename = "player/player1_run_1_sword_" + i + "_left.png";
+            String filename = "player/player1_run_" + i + "_swordleft.png";
             try {
                 run_animationLeftSword.add(ImageIO.read(new File(filename)));
             }
@@ -115,7 +115,7 @@ public class Player {
         catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        jumpRight = new Animation(jump_animationRight,20);
+        jumpRight = new Animation(jump_animationRight,3);
         isRun = false;
         jumping = false;
         hasSword = true;
@@ -178,7 +178,7 @@ public class Player {
 
     public BufferedImage getPlayerImage() {
         if(jumping){
-            yCoord -= 1.75;
+            yCoord -= 3;
             if(yCoord < preJumpYCoord - 200) {
                 jumping = false;
             }
@@ -214,8 +214,6 @@ public class Player {
         isRun = set;
     }
     public Rectangle playerRect() {
-        int imageHeight = getPlayerImage().getHeight();
-        int imageWidth = getPlayerImage().getWidth();
         Rectangle rect = new Rectangle((int) xCoord, (int) yCoord + 5, 77, 119);
         return rect;
     }
