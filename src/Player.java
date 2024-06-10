@@ -22,6 +22,7 @@ public class Player {
     private Animation runRightSword;
     private Animation runLeftSword;
     private Animation jumpRight;
+    private Animation slice;
     private boolean isRun;
     private boolean jumping;
     private boolean hasSword;
@@ -106,6 +107,17 @@ public class Player {
             }
         }
         runLeftSword = new Animation(run_animationLeftSword,66);
+        ArrayList<BufferedImage> sliceAnimation = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            String filename = "player/slice" + i + ".png";
+            try {
+                sliceAnimation.add(ImageIO.read(new File(filename)));
+            }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        slice = new Animation(sliceAnimation,66);
         jump_animationRight = new ArrayList<>();
         /*for (int i = 1; i <= 7; i++) {
             String filename = "player/player1_jump_" + i + ".png";
@@ -122,6 +134,7 @@ public class Player {
         catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
         jumpRight = new Animation(jump_animationRight,3);
         isRun = false;
         jumping = false;
@@ -131,6 +144,7 @@ public class Player {
         runRightSword.startAnimation();
         runLeftSword.startAnimation();
         jumpRight.startAnimation();
+        slice.startAnimation();
     }
 
     public int getxCoord() {
