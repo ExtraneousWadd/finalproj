@@ -39,22 +39,20 @@ public class Sword {
     }
 
     public void setxCoord(double setter){
-        xCoord = setter;
+        xCoord += setter;
     }
 
     public void setyCoord(double setter){
-        yCoord = setter;
+        yCoord += setter;
     }
 
     public boolean isThrown(){return thrown;}
 
     public BufferedImage getImage(){
         if(thrown) {
-            if (player.isFacingRight()) {
-                facingRight = true;
+            if (facingRight) {
                 return right;
             } else {
-                facingRight = false;
                 return left;
             }
         }
@@ -71,10 +69,13 @@ public class Sword {
     public void throwMe(){
         thrown = true;
         if(player.isFacingRight()){
+            xCoord = player.getxCoord() + 20;
             facingRight = true;
         } else {
+            xCoord = player.getxCoord() - 20;
             facingRight = false;
         }
+        yCoord = player.getyCoord() + 20;
 
     }
 

@@ -188,16 +188,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         if(key == 69){
             if(player.isHasSword()) {
                 player.throwSword();
-                swordP1.setyCoord(player.getyCoord() + 20);
-                swordP1.setxCoord(player.getxCoord());
                 swordP1.throwMe();
             }
         }
         if(key == 50){
             if(player2.isHasSword()) {
                 player2.throwSword();
-                swordP2.setyCoord(player.getyCoord() + 20);
-                swordP2.setxCoord(player.getxCoord());
                 swordP2.throwMe();
             }
         }
