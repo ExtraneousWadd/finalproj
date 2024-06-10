@@ -26,12 +26,19 @@ public class Player {
     private boolean jumping;
     private boolean hasSword;
     private ArrayList<BufferedImage> jump_animationRight;
+    private Player playerOther;
 
 
-    public Player(String imageRight, String imageLeft, String imageRightSword, String imageLeftSword, String name) {
+    public Player(String imageRight, String imageLeft, String imageRightSword, String imageLeftSword, String name, Player player, boolean p1) {
         this.name = name;
-        xCoord = 50; // starting position is (50, 435), right on top of ground
-        yCoord = 100;
+        playerOther = player;
+        if (p1) {
+            xCoord = 50; // starting position is (50, 435), right on top of ground
+            yCoord = 100;
+        } else {
+            xCoord = 850;
+            yCoord = 100;
+        }
         preJumpYCoord = yCoord;
         try {
             this.imageRight = ImageIO.read(new File(imageRight));

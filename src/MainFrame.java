@@ -4,13 +4,13 @@ public class MainFrame implements Runnable {
 
     private GraphicsPanel panel;
 
-    public MainFrame(String name) {
+    public MainFrame(String name, String name2) {
         JFrame frame = new JFrame("Skibidi");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(2000, 1000);
         frame.setLocationRelativeTo(null);
 
-        panel = new GraphicsPanel(name);
+        panel = new GraphicsPanel(name, name2);
         frame.add(panel);
         frame.setVisible(true);
 

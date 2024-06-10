@@ -9,15 +9,17 @@ import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel implements KeyListener, MouseListener, ActionListener {
     private Player player;
+    private Player player2;
     private boolean[] pressedKeys;
     private Timer timer;
     private Sword sword;
     private int time;
     private Stage background;
 
-    public GraphicsPanel(String name) {
+    public GraphicsPanel(String name, String name2) {
         background = new Stage("src/line.png","stage",0,500);
-        player = new Player("src/playerImage.png","src/playerImageleft.png", "src/playerImagesword.png", "src/playerImageswordleft.png", name);
+        player = new Player("src/playerImage.png","src/playerImageleft.png", "src/playerImagesword.png", "src/playerImageswordleft.png", name, player2, true);
+        player2 = new Player("src/playerImage.png","src/playerImageleft.png", "src/playerImagesword.png", "src/playerImageswordleft.png", name2, player, false);
         sword = new Sword("src/sword.png");
         pressedKeys = new boolean[128];
         time = 0;
@@ -34,9 +36,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         super.paintComponent(g);  // just do this
         g.drawImage(background.getStageImage(), background.getxCoord(), background.getyCoord(), null);  // the order that things get "painted" matter; we put background down first
         g.drawImage(player.getPlayerImage(), player.getxCoord(), player.getyCoord(), null);
+        g.drawImage(player2.getPlayerImage(), player2.getxCoord(), player2.getyCoord(), null);
 
         g.setFont(new Font("Courier New", Font.BOLD, 24));
         g.drawString(player.getName(), player.getxCoord() - 2, player.getyCoord() - 20);
+        g.drawString(player2.getName(), player2.getxCoord() - 2, player2.getyCoord() - 20);
 
         // player moves left (A)
         if (pressedKeys[65]) {
@@ -51,11 +55,31 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             player.faceRight();
             player.setRun(true);
         }
+
+        if (pressedKeys[37]) {
+            player2.moveLeft();
+            player2.faceLeft();
+            player2.setRun(true);
+        }
+
+
+        if (pressedKeys[39]) {
+            player2.moveRight();
+            player2.faceRight();
+            player2.setRun(true);
+        }
+
         Rectangle rect = new Rectangle((int) background.getxCoord(), (int) background.getyCoord(), background.getStageImage().getWidth(), background.getStageImage().getWidth());
         if (!player.playerRect().intersects(rect)) {
             player.gravity();
         } else {
             player.jump(false);
+        }
+
+        if (!player2.playerRect().intersects(rect)) {
+            player2.gravity();
+        } else {
+            player2.jump(false);
         }
 
     }
@@ -73,6 +97,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                     player.jump(true);
             }
         }
+        if(key == 38){
+            if (player2.playerRect().intersects(background.stageRect())){
+                player2.jump(true);
+            }
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -80,6 +109,10 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         pressedKeys[key] = false;
         if(key == 68 || key == 65){
             player.setRun(false);
+        }
+
+        if(key == 37 || key == 39){
+            player2.setRun(false);
         }
     }
 
