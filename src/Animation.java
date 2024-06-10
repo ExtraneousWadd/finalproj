@@ -41,7 +41,7 @@ public class Animation implements ActionListener {
             //if(currentFrame == 0){
             //    timer.stop();
             //    startAnimation();
-           // }
+            // }
         }
     }
 }

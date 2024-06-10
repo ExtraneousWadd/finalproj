@@ -15,15 +15,9 @@ public class WelcomePanel extends JPanel implements ActionListener {
     private JButton submitButton;
     private JButton clearButton;
     private JFrame enclosingFrame;
-    private BufferedImage titleImage;
 
     public WelcomePanel(JFrame frame) {
         enclosingFrame = frame;
-        try {
-            titleImage = ImageIO.read(new File("src/placeholder.png"));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
         textField = new JTextField(10);
         textField2 = new JTextField(10);
         submitButton = new JButton("Submit");
@@ -42,7 +36,6 @@ public class WelcomePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.setColor(Color.RED);
         g.drawString("Please enter your names:", 50, 30);
-        g.drawImage(titleImage, 200, 50, null);
         textField.setLocation(50, 50);
         textField2.setLocation(50, 70);
         submitButton.setLocation(50, 100);

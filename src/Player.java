@@ -1,17 +1,24 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player {
-    private final double MOVE_AMT = 2.5;
+    private final double MOVE_AMT = .375;
     private BufferedImage imageRight;
     private BufferedImage imageLeft;
     private BufferedImage imageRightSword;
     private BufferedImage imageLeftSword;
+    private BufferedImage jumpLeft;
+    private BufferedImage dead;
     private boolean facingRight;
     private double xCoord;
     private double yCoord;
@@ -22,16 +29,22 @@ public class Player {
     private Animation runRightSword;
     private Animation runLeftSword;
     private Animation jumpRight;
-    private Animation slice;
+    private Animation sliceRight;
+    private Animation sliceLeft;
     private boolean isRun;
     private boolean jumping;
     private boolean hasSword;
+    private boolean attacking;
+    private boolean attackCD;
+    private boolean isDead;
+    private boolean p1;
     private ArrayList<BufferedImage> jump_animationRight;
     private Player playerOther;
 
 
     public Player(String imageRight, String imageLeft, String imageRightSword, String imageLeftSword, String name, Player player, boolean p1) {
         this.name = name;
+        this.p1 = p1;
         playerOther = player;
         if (p1) {
             xCoord = 50; // starting position is (50, 435), right on top of ground
@@ -117,7 +130,18 @@ public class Player {
                 System.out.println(e.getMessage());
             }
         }
-        slice = new Animation(sliceAnimation,66);
+        sliceRight = new Animation(sliceAnimation,20);
+        ArrayList<BufferedImage> sliceAnimationleft = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            String filename = "player/slice" + i + "left.png";
+            try {
+                sliceAnimationleft.add(ImageIO.read(new File(filename)));
+            }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        sliceLeft = new Animation(sliceAnimationleft,20);
         jump_animationRight = new ArrayList<>();
         /*for (int i = 1; i <= 7; i++) {
             String filename = "player/player1_jump_" + i + ".png";
@@ -134,17 +158,31 @@ public class Player {
         catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
+        try {
+            jumpLeft = (ImageIO.read(new File("player/player1_jump_3left.png")));
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            dead = (ImageIO.read(new File("player/dead.jpg")));
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
         jumpRight = new Animation(jump_animationRight,3);
         isRun = false;
         jumping = false;
+        attackCD = false;
         hasSword = true;
+        isDead = false;
         runRight.startAnimation();
         runLeft.startAnimation();
         runRightSword.startAnimation();
         runLeftSword.startAnimation();
         jumpRight.startAnimation();
-        slice.startAnimation();
+        sliceRight.startAnimation();
+        sliceLeft.startAnimation();
     }
 
     public int getxCoord() {
@@ -159,6 +197,9 @@ public class Player {
         return name;
     }
     public boolean isJump(){return jumping;}
+    public boolean getDead(){return isDead;}
+    public boolean isHasSword(){return hasSword;}
+    public boolean isFacingRight(){return facingRight;}
 
     public void faceRight() {
         facingRight = true;
@@ -185,8 +226,103 @@ public class Player {
         jumping = yes;
     }
 
+    public void attack(boolean setter) {
+        if(hasSword) {
+            if (!attackCD) {
+                attackCD = true;
+                attacking = setter;
+                if (setter) {
+                    attackTimer();
+                }
+            }
+        }
+    }
+
+    public void throwSword(){
+        if(hasSword) {
+            hasSword = false;
+            throwTimer();
+        }
+    }
+
+    public void dead(boolean setter){
+        if(isDead == setter){
+            return;
+        }
+        isDead = setter;
+        if(setter){
+            if(p1){
+                xCoord = 50;
+            } else {
+                xCoord = 850;
+            }
+            yCoord = 0;
+            deadTimer();
+        }
+    }
+
+    private void attackTimer(){
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                attacking = false;
+            }
+        };
+        timer.schedule(timerTask, 100);
+
+        Timer attackCDTimer = new Timer();
+        TimerTask attackCDTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                attackCD = false;
+            }
+        };
+        attackCDTimer.schedule(attackCDTask, 750);
+    }
+    private void deadTimer(){
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                isDead = false;
+            }
+        };
+        timer.schedule(timerTask, 3000);
+    }
+
+    private void throwTimer(){
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                hasSword = true;
+            }
+        };
+        timer.schedule(timerTask, 3000);
+    }
+
+    public void reset(){
+        if (p1) {
+            xCoord = 50;
+            yCoord = 100;
+        } else {
+            xCoord = 850;
+            yCoord = 100;
+        }
+        isRun = false;
+        jumping = false;
+        attackCD = false;
+        hasSword = true;
+        isDead = false;
+    }
+
     public void gravity(){
-        yCoord += 1.25;
+        yCoord += .35;
     }
 
     public void turn() {
@@ -198,12 +334,26 @@ public class Player {
     }
 
     public BufferedImage getPlayerImage() {
+        if(isDead){
+            return dead;
+        }
+        if(attacking){
+            if(facingRight){
+                return sliceRight.getActiveFrame();
+            } else {
+                return sliceLeft.getActiveFrame();
+            }
+        }
         if(jumping){
-            yCoord -= 3;
+            yCoord -= 2;
             if(yCoord < preJumpYCoord - 200) {
                 jumping = false;
             }
-            return jumpRight.getActiveFrame();
+            if(facingRight) {
+                return jumpRight.getActiveFrame();
+            } else {
+                return jumpLeft;
+            }
         }
         if(isRun) {
             if (facingRight) {
@@ -235,7 +385,16 @@ public class Player {
         isRun = set;
     }
     public Rectangle playerRect() {
-        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord + 5, 77, 119);
+        Rectangle rect = new Rectangle((int) xCoord, (int) yCoord, 77, 119);
+        return rect;
+    }
+
+    public Rectangle hitRectangle(){
+        if(attacking) {
+            Rectangle rect = new Rectangle((int) xCoord + 30, (int) yCoord + 5, 77, 119);
+            return rect;
+        }
+        Rectangle rect = new Rectangle(0, 0, 0, 0);
         return rect;
     }
 }
