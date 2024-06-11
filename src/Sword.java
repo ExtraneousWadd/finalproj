@@ -81,9 +81,9 @@ public class Sword {
 
     public void movement(){
         if(facingRight){
-            xCoord += .65;
+            xCoord += 2;
         } else {
-            xCoord -= .65;
+            xCoord -= 2;
         }
     }
 

@@ -180,18 +180,18 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                 player.attack(true);
             }
         }
-        if(key == 48){
+        if(key == 96){
             if(!player2.getDead()) {
                 player2.attack(true);
             }
         }
-        if(key == 69){
+        if(key == 69 && !player.getDead()){
             if(player.isHasSword()) {
                 player.throwSword();
                 swordP1.throwMe();
             }
         }
-        if(key == 50){
+        if(key == 98 && !player.getDead()){
             if(player2.isHasSword()) {
                 player2.throwSword();
                 swordP2.throwMe();

@@ -12,7 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Player {
-    private final double MOVE_AMT = .375;
+    private final double MOVE_AMT = 1;
     private BufferedImage imageRight;
     private BufferedImage imageLeft;
     private BufferedImage imageRightSword;
@@ -322,7 +322,7 @@ public class Player {
     }
 
     public void gravity(){
-        yCoord += .35;
+        yCoord += 1.1;
     }
 
     public void turn() {
@@ -345,7 +345,7 @@ public class Player {
             }
         }
         if(jumping){
-            yCoord -= 2;
+            yCoord -= 3.5;
             if(yCoord < preJumpYCoord - 200) {
                 jumping = false;
             }
