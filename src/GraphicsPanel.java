@@ -81,12 +81,16 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             player2Score++;
             player.reset();
             player2.reset();
+            swordP1.reset();
+            swordP2.reset();
         }
 
         if(player.getxCoord() >= 1850){
             player1Score++;
             player.reset();
             player2.reset();
+            swordP1.reset();
+            swordP2.reset();
         }
 
         if(player2.getxCoord() <= 0){
